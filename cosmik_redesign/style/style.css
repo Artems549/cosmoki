@@ -263,7 +263,7 @@ body {
 /* Bunner */
 
 .bunner {
-    background: url(../img/bunner__bg-1.png) no-repeat center;
+    background: url(../img/bunner__bg-1.webp) no-repeat center;
     background-size: cover;
 }
 .bunner__wrapper {
@@ -754,7 +754,7 @@ body {
 /* Free products */
 
 .free-products {
-    background: url(../img/free-products__bg.png) no-repeat center;
+    background: url(../img/free-products__bg.webp) no-repeat center;
     background-size: cover;
 }
 .free-products__wrapper {
