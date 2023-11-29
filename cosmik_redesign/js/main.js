@@ -95,3 +95,15 @@ function closeUserMenu() {
 }
 openUserMenu()
 closeUserMenu()
+
+function hiddenBurgerBtn() {
+    window.addEventListener('scroll', function(e) {
+        if(this.window.scrollY === 0) {
+            burgerBtn.style.display = 'block';
+        } else {
+            burgerBtn.style.display = 'none';
+
+        }
+    })
+}
+hiddenBurgerBtn()

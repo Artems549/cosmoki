@@ -313,8 +313,15 @@ nav ul li ul li ul {
 .header__down-socials {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     column-gap: 15px;
     margin-right: 10px;
+}
+.header__down-socials a img {
+    transition: 0.2s linear;
+}
+.header__down-socials a:hover img {
+    transform: scale(1.05)
 }
 .header__down-login {
     display: flex;
@@ -352,6 +359,12 @@ nav ul li ul li ul {
 }
 .header__down-heart {
     margin-left: 30px;
+}
+.header__down-heart a img {
+    transition: 0.2s linear;
+}
+.header__down-heart a:hover img {
+    transform: scale(1.05)
 }
 .header__down-adaptive {
     display: none;
@@ -609,6 +622,7 @@ nav ul li ul li ul {
     line-height: 110%;
     text-transform: uppercase;
     border-radius: 100px;
+    text-align: center;
     color: var(--color-black);
     background-color: #FFCE47;
 }
@@ -722,6 +736,9 @@ nav ul li ul li ul {
     right: 50%;
     transform: translateX(50%);
     background-color: var(--color-dark-blue);
+}
+.what-method__info {
+    display: none;
 }
 .what-method__slider {
     margin-bottom: 40px;
@@ -1498,4 +1515,458 @@ nav ul li ul li ul {
     }
 
     /* School cosmo */
+}
+
+@media all and (max-width: 769px) {
+    h2 {
+        font-size: 32px;
+    }
+    h3 {
+        font-size: 20px;
+    }
+    h4 {
+        font-size: 18px;
+    }
+    p {
+        font-size: 18px;
+    }
+    .school-cosmo__title h2 {
+        font-size: 25px;
+    }
+    .school-cosmo__items-item-btn a {
+        font-size: 18px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+    .school-cosmo__items-item {
+        max-width: 335px;
+        min-height: 610px;
+    }
+    .bunner__title h2 {
+        font-size: 36px;
+    }
+    .invite__title h2 {
+        font-size: 34px;
+    }
+    .invite__items-item h4 {
+        font-size: 16px;
+    }
+    .invite__items {
+        margin-left: 0px;
+    }
+    .what-get__sides-side:nth-child(1) .what-get__sides-side-item:nth-child(1) ul li {
+        font-size: 15px;
+    }
+    .advantages__items {
+        grid-template-columns: 1fr;
+        justify-content: center;
+    }
+
+    .about-school__sides-side-cards {
+        grid-template-columns: 1fr;
+    }
+
+
+
+    .about-school__sides-side {
+        padding-bottom: 470px;
+    }
+
+
+
+
+    .our-mission__cards-card-pic {
+        margin-bottom: 15px;
+    }
+    .our-mission__cards-card-title {
+        margin-bottom: 20px;
+    }
+    .free-products__cards-card-btn a {
+        width: 260px;
+        font-size: 18px;
+    }
+
+
+    .knowledge__title h2 {
+        
+        font-size: 32px
+    }
+    .knowledge__items-item-text h3 {
+        text-align: center;
+    }
+    
+
+
+    .knowledge__items-item:nth-child(1) .knowledge__items-item-pic,
+    .knowledge__items-item:nth-child(2) .knowledge__items-item-pic,
+    .knowledge__items-item:nth-child(3) .knowledge__items-item-pic {
+        margin-right: 0px;
+        margin-bottom: 20px
+    }
+    .knowledge__items-item {
+        flex-direction: column;
+        align-items: center;
+    }
+    .knowledge__items-item-text p {
+        text-align: center;
+    }
+    
+}
+@media all and (max-width: 550px) {
+    .invite__items {
+        grid-template-columns: 1fr;
+    }
+    .invite__items-item h4 {
+        padding: 8px 0px 8px 0px;
+        
+    }
+}
+
+
+
+
+@media all and (max-width: 491px) {
+    .wrapper,
+    .wrapper-1 {
+        margin: 0px;
+        padding-right: 20px;
+        padding-left: 20px;
+    }
+    h2 {
+        font-size: 26px;
+    }
+
+    .bunner__title h2 {
+        display: block;
+        max-width: 290px;
+        margin: 0 auto;
+        font-size: 30px;
+    }
+
+    /* School cosmo */
+    .school-cosmo__wrapper {
+        padding: 30px 0px 70px 0px;
+    }
+    .school-cosmo__title h2 {
+        font-size: 26px;
+        margin-bottom: 35px;
+    }
+    .school-cosmo__items {
+       gap: 55px;
+    }
+    .school-cosmo__items-item {
+        min-height: inherit;
+        padding: 20px;
+    }
+    .school-cosmo__items-item-pic {
+        margin-bottom: 20px;
+    }
+    .school-cosmo__items-item-title {
+        margin-bottom: 20px;
+    }
+    .school-cosmo__items-item-desc {
+        margin-bottom: 25px;
+    }
+    .school-cosmo__items-item-btn a {
+        position: relative;
+        font-size: 22px;
+        right: 0%;
+        bottom: 0;
+        transform: translateX(0%);
+    }
+    /* School cosmo */
+
+    /* What method */
+
+    .what-method__wrapper {
+        padding-bottom: 40px;
+    }
+    .what-method__title {
+        margin-bottom: 30px;
+    }
+    .what-method__info {
+        position: relative;
+        display: block;
+        text-align: center;
+        max-width: 120px;
+        margin: 0 auto 30px;
+    }
+    .what-method__info::before,
+    .what-method__info::after {
+        content: '';
+        width: 17px;
+        height: 8px;
+        position: absolute;
+        top: 15px;
+        background: url(../img/svg/what-method__arrow.svg) no-repeat center;
+    }
+    .what-method__info::before {
+        left: -20px;
+    }
+    .what-method__info::after {
+        right: -20px;
+        transform: rotate(180deg);
+    }
+    .what-method__info p {
+        font-size: 12px;;
+        font-weight: 600;
+        color: #8F8F8F;
+    }
+    .what-method__slider {
+        margin-bottom: 20px;
+    }
+    .what-method__desc {
+        grid-template-areas: 
+        'desc-1'
+        'picture'
+        'desc-2';
+        row-gap: 30px;
+        padding: 30px 20px;
+    }
+    .what-method__desc-item-title h3 {
+        text-align: center;
+        padding-right: 20px;
+        padding-left: 20px;
+    }
+    .what-method__desc-item:nth-child(1) h3,
+    .what-method__desc-item:nth-child(2) h3 {
+        margin-bottom: 30px
+    }
+    .what-method__desc-item-text p {
+        text-align: center;
+    }
+
+    /* What method */
+
+    .invite__items-item h4 {
+        font-size: 20px;
+        line-height: 130%;
+    }
+
+    /* What get */
+
+    .what-get__sides {
+        gap: 55px;
+        margin: -50px 20px 0px 20px;
+    }
+    .what-get__sides-side:nth-child(1),
+    .what-get__sides-side:nth-child(2) {
+        row-gap: 55px;
+    }
+
+    .what-get__sides-side-item {
+        padding: 25px 20px;
+    }
+    .what-get__sides-side-item-desc p {
+        text-align: center;
+    }
+    .what-get__sides-side:nth-child(1) .what-get__sides-side-item:nth-child(1) p:nth-child(1),
+    .what-get__sides-side:nth-child(1) .what-get__sides-side-item:nth-child(1) p:nth-child(2)
+    .what-get__sides-side:nth-child(1) .what-get__sides-side-item:nth-child(1) ul {
+        margin-bottom: 15px;
+    }
+
+    /* What get */
+
+    /* Advantages */
+
+    .advantages__wrapper {
+        padding-bottom: 70px;
+    }
+    .advantages__title {
+        margin-bottom: 30px;
+    }
+    .advantages__items {
+        gap: 30px;
+    }
+    .advantages__items-item {
+        flex-direction: column;
+        
+    }
+    .advantages__items-item-pic {
+        margin-right: 0px;
+        margin-bottom: 20px;
+    }
+    .advantages__items-item-text {
+        text-align: center;
+    }
+
+
+    /* Advantages */
+
+
+    /* About school */
+    .about-school__wrapper {
+        padding-bottom: 0px;
+    }
+    .about-school__title {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+    .about-school__sides-side-desc {
+        text-align: center;
+    }
+    .about-school__sides-side-desc:nth-child(1) {
+        margin-bottom: 25px;
+    }
+    .about-school__sides-side-cards {
+        gap: 25px;
+        margin-bottom: 25px;
+    }
+    .about-school__sides-side-pics {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .about-school__sides-side-pics img {
+        width: 100%;
+    }
+    .about-school__sides-side-pics img:nth-child(1) {
+        max-width: 333px;
+        right: 50%;
+        transform: translateX(50%);
+        bottom: 200px;
+    }
+    /* About school */
+
+    /* Our mission */
+
+    .our-mission__wrapper {
+        padding: 100px 0px 60px 0px;
+    }
+    .our-mission__cards-card {
+        padding: 20px;
+    }
+    .our-mission__cards-card-pic img {
+        width: 100%;
+        object-fit: contain;
+    }
+    .our-mission__pheno {
+        padding: 57px 15px;
+    }
+    .our-mission__pheno h2 {
+        font-size: 34px;
+    }
+    /* Our mission */
+    
+    /* Free products */
+
+    .free-products__wrapper {
+        padding-bottom: 40px;
+    }
+    .free-products__title {
+        margin-bottom: 30px;
+    }
+    .free-products__cards {
+        gap: 30px;
+    }
+    .free-products__cards-card-pic {
+        margin-bottom: 15px;
+    }
+    .free-products__cards-card-pic img {
+        width: 100%;
+        object-fit: contain;
+    }
+    .free-products__cards-card-title {
+        margin-bottom: 15px;
+    }
+
+    .free-products__cards-card-btn a {
+        margin-bottom: 20px;
+    }
+
+
+    /* Free products */
+    
+    
+    .advantages__title h2,
+    .about-school__title h2,
+    .free-products__title h2 {
+        font-size: 30px;
+    }
+
+    /* Knowledge */
+
+    .knowledge__title h2 {
+        font-size: 26px;
+    }
+    .knowledge__items {
+        gap: 40px;
+    }
+    .knowledge__items-item-text h3 {
+        margin-bottom: 20px;
+    }
+
+    /* Knowledge */
+
+    /* Last news */
+    .last-news h2 {
+        font-size: 30px;
+    }
+    .last-news__cards {
+        padding: 0px;
+        gap: 40px;
+    }
+    .last-news__cards-card-pic img {
+        width: 100%;
+    }
+    .last-news__cards-card {
+        padding: 10px 10px 30px 10px;
+        min-height: inherit;
+    }
+    .last-news__cards-card-more {
+        display: block;
+        position: relative;
+        margin: 0 auto;
+        right: inherit;
+        bottom: inherit;
+        transform: translateX(0%)
+    }
+    .last-news__cards-card-more a {
+        max-width: 170px;
+        display: block;
+        margin: 0 auto;
+    }
+    /* Last news */
+
+
+    /* More knows */
+
+    .more-knows__wrapper {
+        padding-top: 70px;
+        flex-direction: column-reverse;
+    }
+    .more-knows__text {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .more-knows__pic img {
+        margin-bottom: -5px;
+    }
+    .more-knows__text-title {
+        text-align: center;
+    }
+    .more-knows__text-desc {
+        text-align: center;
+    }
+
+    /* More knows */
+    .footer__sides {
+        gap: 30px;
+    }
+
+}
+
+@media all and (max-width: 350px) {
+    .what-get__title h2,
+    .what-method__title h2,
+    .knowledge__title h2 {
+        font-size: 22px;
+    }
+    .school-cosmo__items-item-btn a {
+        width: 235px;
+        padding-right: 45px;
+        padding-left: 45px;
+    }
 }
