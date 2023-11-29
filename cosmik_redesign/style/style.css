@@ -1799,11 +1799,11 @@ nav ul li ul li ul {
     .main-slider__wrapper .owl-dots {
         bottom: 5px !important;
     }
-    .bunner {
+    /* .bunner {
         
         background: url(../img/bunner__adaptive.webp) no-repeat center;
         background-size: cover;
-    }
+    } */
     .bunner__wrapper {
         padding: 210px 0px 223px 0px;
     }
