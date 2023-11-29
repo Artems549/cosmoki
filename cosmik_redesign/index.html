@@ -173,6 +173,7 @@
                     </div>
             </div>
         </section>
+
         <section class="bunner">
             <div class="wrapper">
                 <div class="bunner__wrapper">
@@ -547,8 +548,355 @@
             </div>
         </section>
     
-        <!-- <section class="comsoenergy-online">Уже есть</section> -->
-        <!-- <section class="services">Уже есть</section> -->
+        <section class="cosmoenergy-online">
+            <div class="wrapper">
+                <div class="cosmoenergy-online__text mb-5">
+                    <div class="cosmoenergy-online__text-title">
+                        <h2>КОСМОЭНЕРГЕТИКА ОНЛАЙН</h2>
+                        <h4>Дистанционное обучение</h4>
+                        <h4>МАСТЕР КЛАССЫ</h4>
+                        <p>Современная виртуальная реальность дает нам множество возможностей для того, чтобы использовать новейшие способы обучения. Вы можете пройти ОБУЧЕНИЕ КОСМОЭНЕРГЕТИКЕ ОНЛАЙН. Сеансы, частные консультации у Татьяны Ки, не выходя из своего дома, в удобное для Вас время и в удобном режиме.</p>
+                    </div>
+                </div>
+<div class="cosmoenergy-online-cards">
+<div class="wrapper-cosmoenergy-online">
+                <!--Подгружаем курсы-->
+                <?php
+                    /* Config */
+                    /*$db_name = 'admin_k_school';
+                    $db_user = 'admin_admin';
+                    $db_password = 'TQ8jyJO5lGR2hcIS';
+                    $db_host = 'localhost';*/
+                    
+                    /* new config - old db*/
+                    $db_name = 'admin_k_pl_ru_2';
+                    $db_user = 'admin_admin';
+                    $db_password = 'TQ8jyJO5lGR2hcIS';
+                    $db_host = 'localhost';
+
+                    /* Start connection */
+                    $connection = mysqli_connect($db_host, $db_user, $db_password, $db_name);
+
+                    if ($connection == false) {
+                        echo "Connection failed";
+                    } else {
+                        $sql_courses = "
+                         select * from wp_posts post 
+                         inner join wp_term_relationships rel 
+                         on ( rel.object_id = post.id ) 
+                         where post.post_type='stm-courses' 
+                         and post.post_status='publish'
+                         and (rel.term_taxonomy_id = '129')
+                         order by post.post_date desc
+                         limit 18
+                        ";
+                        $query_courses = mysqli_query($connection, $sql_courses);
+                        $rows = mysqli_fetch_all($query_courses, MYSQLI_ASSOC);
+
+                        function get_post_thumbnail($id, $connect)
+                        {
+
+                            $thumbnail_id = "select meta_value from wp_postmeta where post_id='" . $id . "' and meta_key='_thumbnail_id'";
+                            $get_post_thumb_id = $connect->query($thumbnail_id);
+
+                            $post_thumb_id = $get_post_thumb_id->fetch_assoc()['meta_value'];
+
+                            $thumbnail_url = "select * from wp_postmeta where post_id='" . $post_thumb_id . "'";
+                            $get_post_thumb_url = $connect->query($thumbnail_url);
+
+                            $post_thumb_url = $get_post_thumb_url->fetch_assoc();
+
+                            return $post_thumb_url;
+                        }
+
+                        // основной цикл
+                        echo "<div class=\"cosmo-online__cards\">";
+                        foreach ($rows as $row) {
+                            $post_id = $row['ID'];
+                            $post_title = $row['post_title'];
+                            $post_link = $row['guid'];
+                            $post_excerpt = $row['post_excerpt'];
+                            $post_content = $row['post_content'];
+                            $post_taxonomy = array();
+
+
+                            $sql_postmeta = "select meta_key, meta_value from wp_postmeta where post_id='" . $post_id . "' and meta_key in ('price', 'duration_info', 'course_mark_average', 'skill_level', '_thumbnail_id', 'curriculum')";
+                            $query_postmeta = mysqli_query($connection, $sql_postmeta);
+
+
+                            $sql_post_category_taxonomy = "select term_taxonomy_id from wp_term_relationships where object_id = " . $post_id . "";
+                            $query_taxonomy = mysqli_query($connection, $sql_post_category_taxonomy);
+                            $term_taxonomy_id = mysqli_fetch_assoc($query_taxonomy)['term_taxonomy_id'];
+
+                            $sql_post_category = "select name, slug from wp_terms where term_id=" . $term_taxonomy_id . "";
+                            $query_post_category = mysqli_query($connection, $sql_post_category);
+                            $post_category = mysqli_fetch_assoc($query_post_category);
+                            $post_taxonomy[] = $post_category;
+
+                            echo "<div class=\"cosm-online__cards-card\">"; // начало карточки
+
+                            echo "<div class=\"cosm-online__cards-card-show\">"; // начало верхнего блока
+                                echo "<div class=\"cosm-online__cards-card-show-pic\">"; // начало блока с картинкой
+                                    echo "<a target=\"_blank\" class=\"heading_font\" href='" . $post_link . "'>";
+                                        echo "<img loading='lazy' class=\"cosm-online__cards-card-show-pic-img\" src='https://platform.cosmoki.ru/wp-content/uploads/" . get_post_thumbnail($post_id, $connection)['meta_value'] . "'loading=\"lazy\" alt='".$post_title."'/>";
+                                    echo "</a>";
+                                echo "</div>";
+                                // конец блока с картинкой
+                                // начало блока с таксономиями
+                                echo "<div class=\"cosm-online__cards-card-show-text\">";
+                                    echo "<p class=\"cosm-online__cards-card-show-text-category\">".$post_taxonomy[0]['name']."</p>";
+                                    echo "<a href='".$post_link."' class=\"cosm-online__cards-card-show-text-title\">";
+                                        echo "<h2>".$post_title."</h2>";
+                                    echo "</a>";
+                                echo "</div>";
+                                // конец блока с таксономиями
+                            // начало блоков с метаданными
+                            $meta = [];
+                            $course_level = '';
+
+                            while ($row = mysqli_fetch_assoc($query_postmeta)) {
+
+                                if ($row['meta_key'] == 'course_mark_average') {
+                                    $meta['mark'] = $row['meta_value'];
+                                }
+                                if ($row['meta_key'] == 'duration_info') {
+                                    $meta['duration'] = $row['meta_value'];
+                                }
+                                if ($row['meta_key'] == 'price') {
+                                    $meta['price'] = $row['meta_value'];
+                                }
+                                if ($row['meta_key'] == 'skill_level') {
+                                    $meta['skill'] = $row['meta_value'];
+                                }
+                                if ($row['meta_key'] == '_thumbnail_id') {
+                                    $meta['thumbnail'] = $row['meta_value'];
+                                }
+                                if ($row['meta_key'] == 'psp_status') {
+                                    $meta['psp_status'] = $row['meta_value'];
+                                }
+                                if ($row['meta_key'] == 'curriculum') {
+                                    $initialArray = explode(',', $row['meta_value']);
+                                    $digitsArray = array();
+                                    foreach ($initialArray as $substring) {
+                                        if (is_numeric($substring)) {
+                                            $digitsArray[] = $substring;
+                                        }
+                                    }
+                                    $meta['curriculum'] = $digitsArray;
+                                }
+                            }
+
+                            $meta_keys = array_keys($meta);
+
+                            if (in_array("skill", $meta_keys)) {
+                                switch ($meta['skill']) {
+                                    case 'expert':
+                                        $course_level = 'Эксперт';
+                                        break;
+                                    case 'intermediate':
+                                        $course_level = 'Продвинутый';
+                                        break;
+                                    default:
+                                        $course_level = 'Начинающий';
+                                        break;
+                                }
+                            }
+
+                            // начало блока с ценой, оценкой и длительностью
+                                echo "<div class=\"cosm-online__cards-card-show-price\">";
+                                    // если в массиве нет оценки
+                                    if (in_array('mark', $meta) == 0) {
+                                        echo "<p class=\"cosm-online__cards-card-show-price-time\">".$meta['duration']."</p>";
+                                    }
+                                    // если в массиве есть оценка и она больше 0
+                                    else if (in_array('mark', $meta) && $meta['mark'] > 0) {
+                                    echo "<div class=\"cosm-online__cards-card-show-text-pic\">";
+                                        echo "<img loading='lazy' src='https://cosmoki.ru/wp-content/themes/masterstudy/clean_code_new/img/cosmoenergy-online__star.svg' alt=\"star\">";
+                                        echo "<img loading='lazy' src='https://cosmoki.ru/wp-content/themes/masterstudy/clean_code_new/img/cosmoenergy-online__star.svg' alt=\"star\">";
+                                        echo "<img loading='lazy' src='https://cosmoki.ru/wp-content/themes/masterstudy/clean_code_new/img/cosmoenergy-online__star.svg' alt=\"star\">";
+                                        echo "<img loading='lazy' src='https://cosmoki.ru/wp-content/themes/masterstudy/clean_code_new/img/cosmoenergy-online__star.svg' alt=\"star\">";
+                                        echo "<img loading='lazy' src='https://cosmoki.ru/wp-content/themes/masterstudy/clean_code_new/img/cosmoenergy-online__star.svg' alt=\"star\">";
+                                        echo "<p>".$meta['mark']."</p>";
+                                    echo "</div>";
+                                    }
+                                    if ($meta['price'] == 0) {
+                                        echo "<h2 class=\"cosm-online__cards-card-show-price-cost\">Бесплатно</h2>";
+                                    }
+                                    else {
+                                        echo "<h2 class=\"cosm-online__cards-card-show-price-cost\">".$meta['price']." ₽</h2>";
+                                    }
+                                echo "</div>";
+                            // конец блока с ценой, оценкой и длительностью
+                            echo "</div>";
+                            // конец неспрятанного блока
+
+                            // начало спрятанного блока с информацией
+
+                            echo "<div class=\"cosm-online__cards-card-hidden\">";
+                                echo "<div class=\"cosm-online-online__cards-card-hidden-pic\">";
+                                    echo "<img loading='lazy' src='https://cosmoki.ru/wp-content/themes/masterstudy/clean_code_new/img/cosmoenergy-online__title.png' alt=".$post_title." />";
+                                echo "</div>";
+                                echo "<div class=\"cosm-online__cards-card-hidden-text\">";
+                                    echo "<a href='".$post_link."' class=\"cosm-online__cards-card-hidden-text-title\"><h2>".$post_title."</h2></a>";
+                                    if (in_array('mark', $meta) && $meta['mark'] > 0) {
+                                    echo "<div class=\"cosm-online__cards-card-hidden-text-pic\">";
+                                        echo "<img loading='lazy' src=\"img/cosmoenergy-online__star.svg\" alt=\"star\">";
+                                        echo "<img loading='lazy' src=\"img/cosmoenergy-online__star.svg\" alt=\"star\">";
+                                        echo "<img loading='lazy' src=\"img/cosmoenergy-online__star.svg\" alt=\"star\">";
+                                        echo "<img loading='lazy' src=\"img/cosmoenergy-online__star.svg\" alt=\"star\">";
+                                        echo "<img loading='lazy' src=\"img/cosmoenergy-online__star.svg\" alt=\"star\">";
+                                        echo "<p><span>".$meta['mark']."</span>(11)</p>";
+                                    echo "</div>";
+                                    }
+                                    echo "<p class=\"cosm-online__cards-card-hidden-text-desc\">".explode("\n", $post_content)[0]."</p>";
+                                echo "</div>";
+
+                                echo "<div class=\"cosm-online__cards-card-hidden-category\">";
+                                    echo "<p class=\"cosm-online__cards-card-hidden-category-level\">".$course_level."</p>";
+                                    echo "<p class=\"cosm-online__cards-card-hidden-category-lecture\">".count($meta['curriculum'])." Лекция</p>";
+                                    echo "<p class=\"cosm-online__cards-card-hidden-category-day\">".$meta['duration']."</p>";
+                                echo "</div>";
+
+                                echo "<div class=\"cosm-online__cards-card-hidden-button\">";
+                                    echo "<a href='".$post_link."' class=\"cosm-online__cards-card-hidden-button-btn\">Предварительный просмотр курса</a>";
+                                echo "</div>";
+
+                                echo "<div class=\"cosm-online__cards-card-hidden-price\">";
+                                    if ($meta['price'] == '') {
+                                        echo "";
+                                    } else {
+                                       echo "<p class=\"cosm-online__cards-card-hidden-price-cost\">".$meta['price']." ₽</p>"; 
+                                    }
+                                echo "</div>";
+
+                            // конец спрятанного блока с информацией
+                            echo "</div>";
+                            // конец карточки
+                        echo "</div>";
+                        }
+                    }
+                    echo "</div>";
+                    // кнопка
+                    // echo "<div class='showing'>";
+                    //     echo "<div class='text-center'>";
+                    //         echo "<a id='btnShow' class='cosm-online__cards-show' data-offset='1' data-template='courses/grid' data-url='' data-args='{&quot;per_row&quot;:&quot;6&quot;,&quot;include_link&quot;:true,&quot;posts_per_page&quot;:&quot;6&quot;,&quot;tax_query&quot;:[{&quot;taxonomy&quot;:&quot;stm_lms_course_taxonomy&quot;,&quot;field&quot;:&quot;term_id&quot;,&quot;terms&quot;:[&quot;129&quot;,&quot;188&quot;]}]}'>";
+                    //             echo "<span>";
+                    //                 print_r('Загрузить больше');
+                    //             echo "</span>";
+                    //         echo "</a>";
+                    //     echo "</div>";
+                    // echo "</div>";
+                    // end кнопка
+                    mysqli_close($connection);
+                    ?>
+
+                    <div class="cosmoenergy-online__button">
+                        <a target="_blank" href="https://platform.cosmoki.ru/kursi-cosmoki/">СМОТРЕТЬ ВСЕ КУРСЫ ПО КОСМОЭНЕРГЕТИКЕ</a>
+                    </div>
+                    <!-- !!! СТИЛИ ДЛЯ МОДУЛЯ ТУТ -->
+                    <!-- !!! END стили для модуля !!!-->
+
+                    <!-- !!! СКРИПТЫ ДЛЯ МОДУЛЯ ТУТ -->
+                    <!-- !!! END скрипты для модуля !!!-->
+
+                <!--END подгружаем курсы -->
+                    </div>
+                    </div>
+        </div>
+
+        </section>
+        
+        <section class="services">
+            <div class="container">
+                <div class="services__wrapper">
+                    <div class="services-text">
+                        <h2>УСЛУГИ</h2>
+                        <h4>Вы можете получить помощь целителей не выходя из дома, принимать участие в сеансах и пройти энергетическую диагностику</h4>
+                    </div>
+                </div>
+                 <?php
+                        $connection_services = mysqli_connect($db_host, $db_user, $db_password, $db_name);
+
+                        if ($connection_services == false) {
+                            echo "Connection failed";
+                        } else {
+                            $sql_services = "select * from wp_posts post 
+                            inner join wp_term_relationships rel 
+                             on ( rel.object_id = post.id ) 
+                             where post.post_status='publish'
+                             and rel.term_taxonomy_id = '187'
+                             or rel.term_taxonomy_id = '191'
+                             order by post.post_date desc
+                             limit 6
+                             ";
+                            $query_services = mysqli_query($connection_services, $sql_services);
+                            $rows = mysqli_fetch_all($query_services, MYSQLI_ASSOC);
+
+
+                            function get_service_thumb($id, $connect)
+                            {
+
+                                $thumbnail_id = "select meta_value from wp_postmeta where post_id='" . $id . "' and meta_key='_thumbnail_id'";
+                                $get_post_thumb_id = $connect->query($thumbnail_id);
+
+                                $post_thumb_id = $get_post_thumb_id->fetch_assoc()['meta_value'];
+
+                                $thumbnail_url = "select * from wp_postmeta where post_id='" . $post_thumb_id . "'";
+                                $get_post_thumb_url = $connect->query($thumbnail_url);
+
+                                $post_thumb_url = $get_post_thumb_url->fetch_assoc();
+
+                                return $post_thumb_url;
+                            }
+                            echo "<div class=\"services__cards\">";
+                            foreach ($rows as $row) {
+                                $post_id = $row['ID'];
+                                $post_title = $row['post_title'];
+                                $post_link = $row['guid'];
+
+                                $sql_postmeta = "select meta_key, meta_value from wp_postmeta where post_id='" . $post_id  . "' and meta_key='price'
+                                or meta_key='_regular_price'
+                                ";
+                                $query_servicesmeta = mysqli_query($connection_services, $sql_postmeta);
+
+                                $meta_services = [];
+
+                                echo "<div class=\"services__cards-card\">"; // начало карточки
+                                    echo "<div class=\"services__cards-card-pic\">"; // начало изображения
+                                        echo "<a target=\"_blank\" class=\"heading_font\" href='" . $post_link . "'>";
+                                            echo "<img src='https://cosmoki.ru/wp-content/uploads/" . get_service_thumb($post_id, $connection_services)['meta_value'] . "'loading=\"lazy\" alt='".$post_title."'/>";
+                                        echo "</a>";
+                                        while ($row = mysqli_fetch_assoc($query_servicesmeta)) {
+                                            if ($row['meta_key'] == 'price') {
+                                                $meta_services['price'] = $row['meta_value'];
+                                                   echo "<span>".$meta_services['price']." ₽</span>"; // цена в карточке  
+                                            } 
+                                            else if ($row['meta_key'] == '_regular_price') {
+                                                $meta_services['_regular_price'] = $row['meta_value'];
+                                                /* Забиваем вручную посты блядь */
+                                                   echo "<span>".$meta_services['_regular_price']." ₽</span>"; // цена в карточке  
+                                            }
+                                            else {
+                                                 echo "<span>Цена по запросу</span>"; // цена в карточке
+                                            }
+                                        }
+                                    echo "</div>"; // конец изображения
+                                    echo "<div class='services__cards-card-text'>"; // начало тайтла
+                                        echo "<p>".$post_title."</p>";
+                                    echo "</div>";
+                                echo "</div>"; // конец карточки
+
+                            }
+                        echo "</div>";
+                        }
+                        mysqli_close($connection_services);
+                    ?>
+                </div>
+                 <div class="services__button">
+                    <a href="https://platform.cosmoki.ru/product-category/uslugi/">СМОТРЕТЬ ВСЕ УСЛУГИ ПО КОСМОЭНЕРГЕТИКЕ</a>
+                </div>
+            </div>
+        </section>
 
         <section class="free-products">
             <div class="wrapper">
@@ -637,7 +985,45 @@
                 </div>
             </div>
         </section>
-
+        <section class="video">
+            <div class="container">
+                <div class="video__wrapper">
+                    <div class="video__text">
+                        <h2>ВИДЕО ПО КОСМОЭНЕРГЕТИКЕ</h2>
+                        <h4>Для Вас программы на ТВ о методе, видео про обучение космоэнергетике, отзывы практикующих космоэнергетику и т.д.</h4>
+                    </div>
+                    <div class="video__videos">
+                        <div class="video__videos-item">
+                            <video class="video__videos-item-video" controls alt="kluch_k_zdorovju_i_uspehu">
+                                <source src="https://cosmoki.ru/wp-content/themes/masterstudy/clean_code_new/videos/kluch_k_zdorovju_i_uspehu.mp4" type="video/mp4">
+                            </video>
+                            <img class="video__videos-item-pic" src="https://cosmoki.ru/wp-content/themes/masterstudy/clean_code_new/img/video-1.webp" alt="kluch_k_zdorovju_i_uspehu">
+                            <div class="video__videos-item-overlay"></div>
+                            <img class="video__videos-item-play" src="https://cosmoki.ru/wp-content/themes/masterstudy/clean_code_new/img/video-play-btn.svg" alt="play">
+                        </div>
+                        <div class="video__videos-item">
+                            <video class="video__videos-item-video" controls>
+                                <source src="https://cosmoki.ru/wp-content/themes/masterstudy/clean_code_new/videos/isceli_sebya_sam.mp4" type="video/mp4">
+                            </video>
+                            <img class="video__videos-item-pic" src="https://cosmoki.ru/wp-content/themes/masterstudy/clean_code_new/img/video-2.webp" alt="kluch_k_zdorovju_i_uspehu">
+                            <div class="video__videos-item-overlay"></div>
+                            <img class="video__videos-item-play" src="https://cosmoki.ru/wp-content/themes/masterstudy/clean_code_new/img/video-play-btn.svg" alt="play">
+                        </div>
+                        <div class="video__videos-item">
+                            <video class="video__videos-item-video" controls>
+                                <source src="https://cosmoki.ru/wp-content/themes/masterstudy/clean_code_new/videos/kosmoenergetika_hello.mp4" type="video/mp4">
+                            </video>
+                            <img class="video__videos-item-pic" src="https://cosmoki.ru/wp-content/themes/masterstudy/clean_code_new/img/video-3.webp" alt="kluch_k_zdorovju_i_uspehu">
+                            <div class="video__videos-item-overlay"></div>
+                            <img class="video__videos-item-play" src="https://cosmoki.ru/wp-content/themes/masterstudy/clean_code_new/img/video-play-btn.svg" alt="play">
+                        </div>
+                    </div>
+                    <div class="video__button">
+                        <a href="https://cosmoki.ru/video-galereya/">СМОТРЕТЬ БОЛЬШЕ ВИДЕО ПО КОСМОЭНЕРГЕТИКЕ</a>
+                    </div>
+                </div>
+            </div>
+        </section>
         <section class="last-news">
             <div class="wrapper">
                 <div class="last-news__wrapper">
@@ -720,6 +1106,134 @@
                 </div>
             </div>
         </section>
+
+        <section class="reviews">
+            <div>
+                <div class="reviews__wrapper">
+                    <div class="reviews__title">
+                        <h2>Отзывы</h2>
+                    </div>
+                    <div class="owl-carousel owl-theme" id="owl-carousel__reviews">
+                    </div>
+                </div>
+            </div>
+        </section>
+<script>
+    let youtubeIds = ['dsxlmvih2-k',
+'hKmknc2tk2I',
+'y_bqhRwJsfA',
+'VR1iyJvOITk',
+'ctdB-BgZqkU',
+'2ryQoymLML0',
+'HIvXBN9lJt8',
+'tMzWlfVjd4o',
+'aMFr7VGM52g',
+'yWXQcM-_kkc',
+'857-AJgfnZc',
+'GinhIMvANF4',
+'TJC_rSR7rS0',
+'AgEBk04wUK8',
+'_mnRJsQMp-4',
+'kQZZpGSL9qQ',
+'QMu4aPBj7jg',
+'140Vr-qyyZc',
+'aN1f-mFOuZY',
+'r5DD6JwxB-8',
+'tB-bXHOWBS4',
+'dd6ETXirb3A',
+'-bLVEuPeN3s',
+'28RL1HneAv0',
+'Rdr9Xu9gR_0',
+'J67q0jFMnzI',
+'dlFNnIJYhgc',
+'6FLOP9H7EzE',
+'L_Sfs__lIdA',
+'1wYYzve3lGo',
+'qYLETXGQZj8',
+'n3Yz_TrW3Zg',
+'kCNY9sf8JSA',
+'t2D4HAP93kg',
+'aStybst-j0g',
+'YNyHNqbshuQ',
+'aksmZXeV9fE',
+'_PJIP46TOEc',
+'3-mMbi6WVYA',
+'xAsnk79a1x4',
+'Ryd74R6-iFI',
+'sPB-_JPQN4c',
+'llbsFA-CYZg',
+'AsAY2S_Iulo',
+'Djcf5sQmT-8',
+'GJj8ny4VQ_o',
+'pL8ufKZmx7o',
+'qzdg0QkDjJM',
+'-vO7nDv4Xv0',
+'arGM7omtxfA',
+'0sy2UJkpX-k',
+'nvHMo4yMIIU',
+'grqA4GXz34I',
+'mU8nwEEwnTs',
+'o76R8aTDaCw',
+'6b2m27tKsUo',
+'Z1mmKQCWnJw',
+'QFN8OyRhYJo',
+'D54WJUEFja4',
+'wo26mhNsavY',
+'rEYAnvwwUk4',
+'nNYV0Km4aBM',
+'7ufbUDReGOY',
+'8F5NDa49sYY',
+'lZ-7xt9jyXg',
+'pRT5RAVIFcY',
+'1UXWf87kqGQ',
+'GCff-2PZgoo',
+'CX1mgmyhqMg',
+'Yzt2y7q4UCw',
+'lWTGeT6buqc',
+'0ie0R-O4wFg',
+'y3rnCxzSKGw',
+'dKrKvNk599Y',
+'OQYWdziXXqg',
+];
+
+    let reviewsCarouselTest = document.querySelector('#owl-carousel__reviews');
+
+    youtubeIds.forEach((item, index) => {
+        let reviewsItem = document.createElement('div');
+        reviewsItem.classList.add('reviews__item');
+
+        let reviewsItemPlayer = document.createElement('div');
+        reviewsItemPlayer.classList.add('youtube-player');
+        reviewsItemPlayer.setAttribute('data-id', item);
+        reviewsItemPlayer.setAttribute('data-related', "0");
+        reviewsItemPlayer.setAttribute('data-control', "1");
+        reviewsItemPlayer.setAttribute('data-info', "0" );
+        reviewsItemPlayer.setAttribute('data-fullscreen', "0");
+        reviewsItemPlayer.style.cssText = "width:100%;background-color:black;position: relative;cursor: pointer;max-height:191px;height:100%; overflow:hidden;display: block;padding-bottom: 56.25%;";
+
+        let reviewsItemImg = document.createElement('img');
+        reviewsItemImg.setAttribute('loading', 'lazy');
+        reviewsItemImg.setAttribute('alt', 'отзыв');
+        reviewsItemImg.setAttribute('src', "//i.ytimg.com/vi/" + item + "/hqdefault.jpg");
+        reviewsItemImg.style.cssText = "bottom: -100%; display: block; left: 0; margin: auto; max-width: 100%; width: 100%;height:auto; position: absolute; right: 0; top: -100%;";
+
+        let reviewsItemBg = document.createElement('div');
+        reviewsItemBg.style.cssText = "background-color: rgba(0, 0, 0, 0.5); box-shadow: 0px 0px 0px 5px rgba(0, 0, 0, 0.5);position:absolute; border: 4px solid #fff;border-radius: 50%;left:50%;top:50%; margin-left:-36px; margin-top:-36px; height: 72px; width: 72px; align-items: center; display: flex; justify-content: center;"
+
+        let reviewsItemTriangle = document.createElement('div');
+        reviewsItemTriangle.classList.add('triangle');
+        reviewsItemTriangle.style.cssText = "border-style: solid;height: 0;width: 0;border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgba(0,0,0,0) #ffffff;border-width: 16px 0 16px 24px;margin-left:6px;";
+
+        reviewsItemBg.appendChild(reviewsItemTriangle);
+
+        reviewsItemPlayer.appendChild(reviewsItemImg);
+        reviewsItemPlayer.appendChild(reviewsItemBg);
+
+        reviewsItem.appendChild(reviewsItemPlayer);
+
+        reviewsCarouselTest.insertAdjacentElement('afterbegin', reviewsItem);
+    });
+</script>
     </main>
     <footer class="footer">
         <div class="wrapper-1">
