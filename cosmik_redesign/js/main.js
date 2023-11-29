@@ -16,7 +16,38 @@ $(document).ready(function(){
   });
 
 
+// Main slider 
+$("#owl-carousel__main").owlCarousel({
+    items: 1,
+    loop: true,
+    mouseDrag: false,
+    touchDrag: false,
+    nav: true,
+    autoplay: true,
+    autoplayTimeout:5000,
+  });
+  let lastMainPrew = document.querySelector('#owl-carousel__main .owl-nav .owl-prev span').innerHTML = "";
+  let lastMainNext = document.querySelector('#owl-carousel__main .owl-nav .owl-next span').innerHTML = "";
 
+const modal = document.querySelector('.main-slider__mod');
+const closeModal = document.querySelector('.main-slider__close p');
+const subscribeBtn = document.querySelector('.subscribe__btn');
+
+
+document.addEventListener('click', (event) => {
+if (event.target.classList.contains('subscribe__btn')) {
+  if(modal.style.display !== 'flex') {
+    modal.style.display = 'flex';
+    overlay.style.display = 'block';
+  }
+}
+});
+closeModal.addEventListener('click', () => {
+if(modal.style.display !== 'none') {
+  modal.style.display = 'none';
+  overlay.style.display = 'none';
+}
+})
 
 
 // Burger menu
